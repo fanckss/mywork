@@ -1,24 +1,230 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-	<meta chraset="UTF-8">
-	<style type="text/css"> body {background-size: cover} </style>
-	<link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+  <meta charset="UTF-8">
+  <style type="text/css"> body {background-size: cover} </style>
+  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>weeeeeeeee</title>
 </head>
+<style>
+  html, body {
+    margin: 0;
+    font-size: 14px;
+  }
+  .container {
+    position: relative;
+  }
+  .box {
+    position: absolute;
+    left: 200px;
+    top: 100px;
+    width: 400px;
+    height: 400px;
+    color: #fff;
+  }
+  .img-box {
+    position: absolute;
+    width: 400px;
+    height: 400px;
+    background-color: sandybrown;
+  }
+  .flat {
+    position: absolute;
+    right: -20px;
+    top: -20px;
+    width: 40px;
+    height: 40px;
+  }
+  .rotate, .rotate1 {
+    position: absolute;
+    right: -20px;
+    bottom: -20px;
+    width: 40px;
+    height: 40px;
+  }
+  .rotate1 {
+    left: -20px;
+    right: auto;
+  }
+  .img {
+    width: 100%;
+    height: 100%;
+    cursor: move;
+  }
+  .header {
+    height: 50px;
+  }
+</style>
+
+
 <body background="https://steamuserimages-a.akamaihd.net/ugc/1695026375248771267/C6837E96C4529265334564035603C0BAA3B2554D/?imw=637&imh=358&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=true;background-attachmet: fixed;">
-
-	<a id="top"></a>
-	<a href="#last">抵達最下面</a>
-		<img scr="https://pic.616pic.com/ys_img/00/08/90/I2UH4butPE.jpg" style="width:40px;border:0;"></a>
-	<h1></h1>
-	
+  <a id="top"></a>
+  <a href="#last">抵達最下面</a>
+  <div class="header">
+  </div>
+  <div class="container">
+    <div class="box">
+      <div class="img-box">
+        <div class="flat"></div>
+        <div class="rotate"></div>
+        <div class="rotate1"></div>
+        <img src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExeW83NGx0M214am9pZGxwdHlzMGd6NGw0aW1seXB4YTF5cGw2YW01cyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/GXNA5opQRZGzYfHSPx/giphy.gif" alt="" class="img">
+      </div>
+    </div>
+  </div>
+        <a href="https://www.youtube.com/channel/UC7fk0CB07ly8oSl0aqKkqFg"target="_blank">
+        <img src="https://holo-clips.com/wp-content/uploads/2023/07/%E7%99%BE%E9%AC%BC%E3%81%82%E3%82%84%E3%82%81-%E9%A0%AD%E5%83%8F.jpg" alt="連結" style="width:200px;border:0;"></a>
 <br>
-				<a href="https://www.youtube.com/channel/UC7fk0CB07ly8oSl0aqKkqFg"target="_blank">
-				<img src="https://holo-clips.com/wp-content/uploads/2023/07/%E7%99%BE%E9%AC%BC%E3%81%82%E3%82%84%E3%82%81-%E9%A0%AD%E5%83%8F.jpg" alt="連結" style="width:200px;border:0;"></a>
-<br>
-	<a id="last"></a>
-	<a href="#top">回到最上面</a>
+  <a id="last"></a>
+  <a href="#top"><img src="https://w7.pngwing.com/pngs/792/964/png-transparent-computer-icons-up-arrow-angle-black-arrow-icon.png" alt="回到最上面"style="width:200px;border:0;"></a>
 <BGCOLOR SRC=https://youtu.be/ECkxzFgbJqQ?si=73xS6CXJsp-X48pR LOOP=infinite DELAY=0>
-
 </body>
+
+
+<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script>
+  var flat = -1
+  $(".flat").click(function() {
+    $(".img").css("transform", "scaleX("+flat+")")
+    flat = -flat
+  })
+
+  var pointA = { 
+    X: $('.box').width() / 2 + $('.box').offset().left,
+    Y: $('.box').height() / 2 + $('.box').offset().top
+  };
+  console.log(pointA, $('.box').position())
+
+  var pointB = {};
+  var pointC = {};
+  var typeMouse = false;
+  var moveMouse = false;
+  var allA = 0;
+  var count = 0;
+  var mPointB = {}
+  var init = {
+    count: 0
+  }
+  var oldTarget = {
+    target: null,
+    angle: 0
+  }
+
+  $(".rotate, .rotate1").on('mousedown', function (e) {
+    e.preventDefault()
+    e.stopPropagation()
+    var tanA = $('.box').width() / $('.box').height()
+    var d = Math.round(Math.atan(tanA) * 180 / Math.PI)
+    if (oldTarget.target && oldTarget.target != e.currentTarget) {
+      if (e.currentTarget == $('.rotate')[0]) {
+        oldTarget.angle = 2 * d
+      } else {
+        oldTarget.angle = -2 * d
+      }
+    } else {
+      oldTarget.angle = 0
+    }
+
+    typeMouse = true;
+    if (count < 1) {
+      pointB.X = e.pageX;
+      pointB.Y = e.pageY;
+      init.count = 0
+      oldTarget.target = e.currentTarget
+      count++
+    }
+    if (mPointB.flag) {
+      pointB.X += mPointB.X
+      pointB.Y += mPointB.Y
+      mPointB.flag = false
+      init.count = 0
+    }
+    console.log(5, pointA, pointB)
+
+    $(document).on('mousemove', function (e) {
+      e.preventDefault()
+      if (typeMouse) {
+        pointC.X = e.pageX;
+        pointC.Y = e.pageY;
+        var scalX1 = pointB.X - pointA.X
+        var scalY1 = pointB.Y - pointA.Y
+        var scalX = pointC.X - pointA.X
+        var scalY = pointC.Y - pointA.Y
+        var AB = {};
+        var AC = {};
+        AB.X = (pointB.X - pointA.X);
+        AB.Y = (pointB.Y - pointA.Y);
+        AC.X = (pointC.X - pointA.X);
+        AC.Y = (pointC.Y - pointA.Y);
+        var direct = (AB.X * AC.Y) - (AB.Y * AC.X);
+        var lengthAB = Math.sqrt(Math.pow(pointA.X - pointB.X, 2) +
+            Math.pow(pointA.Y - pointB.Y, 2)),
+          lengthAC = Math.sqrt(Math.pow(pointA.X - pointC.X, 2) +
+            Math.pow(pointA.Y - pointC.Y, 2)),
+          lengthBC = Math.sqrt(Math.pow(pointB.X - pointC.X, 2) +
+            Math.pow(pointB.Y - pointC.Y, 2));
+        var cosA = (Math.pow(lengthAB, 2) + Math.pow(lengthAC, 2) - Math.pow(lengthBC, 2)) /
+          (2 * lengthAB * lengthAC);
+        var angleA = Math.round(Math.acos(cosA) * 180 / Math.PI);
+        if (direct < 0) {
+          allA = -angleA;
+        } else {
+          allA = angleA;
+        }
+
+        allA += oldTarget.angle
+        var sa = Math.sqrt(scalX1 * scalX1 + scalY1 * scalY1)
+        var ss = Math.sqrt(scalX * scalX + scalY * scalY)
+        var sc = ss / sa
+        $('.img-box').css('transform', 'rotate('+allA+'deg) scale('+sc+')')
+      }
+    });
+  });
+  $('.img').mousedown(function (e) {
+    e.preventDefault()
+    e.stopPropagation()
+    moveMouse = true
+    if (init.count < 1) {
+      init = {
+        X: e.pageX,
+        Y: e.pageY,
+        count: 1
+      }
+    }
+    var dis = {
+      X: e.pageX - $('.box').position().left,
+      Y: e.pageY - $('.box').position().top
+    }
+    $(document).on('mousemove', function (event) {
+      event.preventDefault()
+      event.stopPropagation()
+      if (moveMouse) {
+        var end = {}
+        end.X = event.pageX - dis.X
+        end.Y = event.pageY - dis.Y
+        $('.box').css({
+          'left': end.X,
+          'top': end.Y
+        })
+        pointA = {
+          X: $('.box').width() / 2 + $('.box').offset().left,
+          Y: $('.box').height() / 2 + $('.box').offset().top
+        };
+        if (count > 0) {
+          mPointB.X = event.pageX - init.X
+          mPointB.Y = event.pageY - init.Y
+          mPointB.flag = true
+        }
+      }
+    })
+  })
+  $(document).on('mouseup', function (e) {
+    typeMouse = false;
+    moveMouse = false
+  });
+
+</script>
+
 </html>
